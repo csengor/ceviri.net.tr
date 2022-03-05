@@ -34,6 +34,8 @@ def home(request):
                 new_file.save()
 
                 new_query = TranslationQuery()
+                new_query.source_language = source_language
+                new_query.target_language = target_language
                 new_query.content = {
                     'type': 'doc',
                     'file_id': new_file.id
@@ -46,6 +48,8 @@ def home(request):
             source_text = request.POST['source_text'].split('\n')
 
             new_query = TranslationQuery()
+            new_query.source_language = source_language
+            new_query.target_language = target_language
             new_query.content = {
                 'type': 'text',
                 'text': source_text

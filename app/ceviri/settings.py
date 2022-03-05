@@ -28,6 +28,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS = ['https://*.ceviri.net.tr']
 
 # Application definition
 

@@ -1,0 +1,6 @@
+celery
+Django
+gunicorn
+kaplan
+psycopg2
+requests

@@ -1,0 +1,84 @@
+version: "3.9"
+
+networks:
+  proxy-tier:
+    external: true
+    name: ${PROXY_NETWORK_NAME:-nginx-proxy}
+  nmt-network:
+    external: true
+    name: ${NMT_NETWORK_NAME:-ceviri-nmt}
+
+services:
+  rabbit:
+    image: rabbitmq
+    container_name: cevirinettr_rabbit
+    restart: unless-stopped
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=${DJANGO_DB_PASSWORD}
+      - POSTGRES_USER=${DJANGO_DB_USER}
+      - POSTGRES_DB=${DJANGO_DB_NAME}
+    restart: unless-stopped
+    volumes:
+      - ./db/data/db:/var/lib/postgresql/data
+  app:
+    build: app/
+    command: bash -c "python manage.py migrate --no-input &&
+                      python manage.py collectstatic --no-input &&
+                      gunicorn ceviri.wsgi:application -b 0.0.0.0:8000 -w 2 -t 300"
+    container_name: cevirinettr_app
+    depends_on:
+      - db
+      - rabbit
+    environment:
+      - DJANGO_DB_ENGINE=django.db.backends.postgresql
+      - DJANGO_DB_NAME=${DJANGO_DB_NAME}
+      - DJANGO_DB_USER=${DJANGO_DB_USER}
+      - DJANGO_DB_PASSWORD=${DJANGO_DB_PASSWORD}
+      - DJANGO_DB_HOST=db
+      - DJANGO_DB_PORT=5432
+      - DJANGO_DEBUG=${DJANGO_DEBUG}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - RABBIT_HOST=rabbit
+      - NMT_BACKEND=${NMT_BACKEND}
+    restart: unless-stopped
+    volumes:
+      - ./staticfiles:/app/staticfiles
+  celery:
+    image: cevirinettr_app
+    command: celery -A ceviri worker -l INFO -E --concurrency=1
+    depends_on:
+      - app
+      - db
+      - rabbit
+    environment:
+      - DJANGO_DB_ENGINE=django.db.backends.postgresql
+      - DJANGO_DB_NAME=${DJANGO_DB_NAME}
+      - DJANGO_DB_USER=${DJANGO_DB_USER}
+      - DJANGO_DB_PASSWORD=${DJANGO_DB_PASSWORD}
+      - DJANGO_DB_HOST=db
+      - DJANGO_DB_PORT=5432
+      - DJANGO_DEBUG=${DJANGO_DEBUG}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - RABBIT_HOST=rabbit
+      - NMT_BACKEND=${NMT_BACKEND}
+    networks:
+      - default
+      - nmt-network
+    restart: unless-stopped
+  web:
+    build: web/
+    container_name: cevirinettr_web
+    depends_on:
+      - app
+    environment:
+      - LETSENCRYPT_HOST=${VIRTUAL_HOST}
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - VIRTUAL_PORT=8000
+    networks:
+      - default
+      - proxy-tier
+    restart: unless-stopped
+    volumes:
+      - ./staticfiles:/staticfiles:ro

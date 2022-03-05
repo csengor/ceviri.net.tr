@@ -1,0 +1,98 @@
+body {
+  box-sizing: border-box;
+  display: grid;
+  grid-auto-rows: auto 1fr auto;
+  font-family: monospace;
+  font-size: 1rem;
+  margin: 0;
+  min-height: 100vh;
+  padding: 0;
+}
+body:not(.loading) * {
+  transition: 0.4s;
+}
+button {
+  background-color: white;
+  border: .25rem solid #1967D2;
+  border-radius: .25rem;
+  color: #1967D2;
+  font-weight: bold;
+  padding: .5rem;
+}
+button:hover, button.selected {
+  background-color: #1967D2;
+  color: white;
+}
+button.decline {
+  border: .25rem solid red;
+  color: red;
+}
+button.decline:hover {
+  background-color: red;
+  color: white;
+}
+div#disclaimer, div#loading {
+  background-color: rgba(255, 255, 255, 0.5);
+  display: grid;
+  grid-template: 1fr auto 2fr / 1fr auto 1fr;
+  height: 100vh;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+}
+div#disclaimer div, div#loading div {
+  background-color: white;
+  grid-column: 2;
+  grid-row: 2;
+  padding: 1rem;
+}
+div#disclaimer div {
+  border: .1rem solid #1967D2;
+  border-radius: .1rem;
+}
+div#loading div {
+  text-align: center;
+}
+div#loading div svg {
+  max-width: 80vw;
+}
+footer, header {
+  background-color: #1967D2;
+  color: white;
+  font-weight: bold;
+}
+footer {
+  font-size: .75rem;
+  grid-row: 3;
+  text-align: center;
+}
+h1#logotype {
+  margin: .5rem;
+  user-select: none;
+}
+main {
+  background-color: white;
+  margin: 1rem max(2rem, 5vw);
+  padding: 1rem;
+}
+main#translate div#doc-to-translate {
+  border: .1rem solid #1967D2;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  text-align: center;
+}
+main#translate div#doc-to-translate input {
+  display: none;
+}
+main#translate div#language-options, main#translate div#text-to-translate {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+}
+main#translate div#language-options, main#translate div#choose-text-or-doc {
+  padding-bottom: 1rem;
+}
+.hidden {
+  display: none !important;
+}

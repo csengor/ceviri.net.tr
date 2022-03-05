@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block body %}
+<main>
+  <p>{% translate "Last Updated:" %} 2022-03-02</p>
+  <h1>{% translate "Terms and Conditions" %}</h1>
+  <ol>
+    <li><p>{% blocktranslate trimmed %}Machine translation is provided as-is and
+           accuracy is not guaranteed.{% endblocktranslate %}</p></li>
+    <li><p>{% blocktranslate trimmed %}Source and target texts are saved to
+           improve accuracy.{% endblocktranslate %}</p></li>
+    <li><p>{% blocktranslate trimmed %}Ceviri reserves the right to, from
+           time to time and in its discretion, modify these Terms and
+           Conditions.{% endblocktranslate %}</p></li>
+  </ol>
+</main>
+{% endblock %}

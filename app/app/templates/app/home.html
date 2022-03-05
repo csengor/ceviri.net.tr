@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block body %}
+<main id="translate">
+  {% csrf_token %}
+  <div id="choose-text-or-doc">
+    <button id="btn-select-text" class="text-or-doc selected" type="button">{% translate "Text" %}</button>
+    <button id="btn-select-doc" class="text-or-doc" type="button">{% translate "Documents" %}</button>
+  </div>
+  <div id="language-options">
+    <select id="source-language">
+      <option value="en" selected>{% translate "English" %}</option>
+      <option value="tr">{% translate "Turkish" %}</option>
+    </select>
+    <select id="target-language">
+      <option value="en">{% translate "English" %}</option>
+      <option value="tr" selected>{% translate "Turkish" %}</option>
+    </select>
+  </div>
+  <div id="text-to-translate">
+    <textarea id="source-text" name="source-text" rows="24" cols="60" maxlength="1024"></textarea>
+    <textarea id="target-text" name="target-text" rows="24" cols="60" maxlength="1024"></textarea>
+  </div>
+  <div id="doc-to-translate" class="hidden">
+    <label id="label-file-upload" for="file-upload">
+      <input type="file" id="file-upload" name="file-upload" accept=".docx, .json, .kxliff, .odp, .ods, .odt, .po, .sdlxliff, .txt, .xliff"/>
+      <p id="file-upload-message">{% translate "Click here to upload your document." %}</p>
+      <p>{% translate "Supported formats:" %} .docx, .json, .kxliff, .odp, .ods, .odt, .po, .sdlxliff,
+         .txt, .xliff</p>
+      <p>(5 MB)</p>
+    </label>
+  </div>
+</main>
+<div id="disclaimer">
+  <div>
+    <h1>{% translate "Welcome," %}</h1>
+    <p>{% blocktranslate trimmed %}Use of this app is subject to
+       <a href="/terms-and-conditions">these Terms and Conditions</a>.
+       {% endblocktranslate %}</p>
+    <button id="btn-agree">{% blocktranslate trimmed %}Agree{% endblocktranslate %}</button>
+  </div>
+</div>
+<div id="loading" class="hidden">
+    <div>
+        <svg width="480" height="294" viewBox="0 0 480 294" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M430.587 137.201L429.033 146.548L436.483 152.404C454.334 166.435 464 184.399 464 203C464 222.04 453.862 240.434 435.185 254.598C416.497 268.77 389.968 278 360 278H120C90.0317 278 63.5029 268.77 44.815 254.598C26.138 240.434 16 222.04 16 203C16 177.563 34.4373 152.775 66.6659 138.722L73.9825 135.532L75.8343 127.768C86.7479 82.0109 127.922 48 177 48C194.718 48 211.356 52.4174 225.921 60.1977L237.774 66.5293L246.058 55.9486C265.121 31.6004 294.734 16 328 16C385.438 16 432 62.5624 432 120C432 125.87 431.515 131.616 430.587 137.201Z" stroke="#1967D2" stroke-width="32"/>
+            <path d="M288 32V88M288 88V96H304V88H288Z" stroke="#1967D2" stroke-width="6"/>
+            <path d="M320 32V88M320 88V96H336V88H320Z" stroke="#1967D2" stroke-width="6"/>
+            <path d="M352 32V88M352 88V96H368V88H352Z" stroke="#1967D2" stroke-width="6"/>
+        </svg>
+        <p>{% translate "Translation in progress..." %}</p>
+    </div>
+</div>
+{% endblock %}

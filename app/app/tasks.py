@@ -97,7 +97,7 @@ def translate_text(source, query_id, char_limit=1024):
         r = requests.post(settings.NMT_BACKEND, json=query)
         for tu_i, unit in r.json()['units'].items():
             for s_i, segment in unit.items():
-                target[tu_i][s_i] = html.escape(segment)
+                target[tu_i][s_i] = segment
 
                 new_segment = SegmentModel()
                 new_segment.source_language = query_instance.source_language

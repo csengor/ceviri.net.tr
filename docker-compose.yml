@@ -45,6 +45,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./staticfiles:/app/staticfiles
+      - ./files:/app/app/files
   celery:
     image: cevirinettr_app
     command: celery -A ceviri worker -l INFO -E --concurrency=1
@@ -67,6 +68,8 @@ services:
       - default
       - nmt-network
     restart: unless-stopped
+    volumes:
+      - ./files:/app/app/files
   web:
     build: web/
     container_name: cevirinettr_web
